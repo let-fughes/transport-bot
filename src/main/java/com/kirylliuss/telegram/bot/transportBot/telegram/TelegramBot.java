@@ -1,6 +1,7 @@
 package com.kirylliuss.telegram.bot.transportBot.telegram;
 
 import com.kirylliuss.telegram.bot.transportBot.config.BotConfig;
+import com.kirylliuss.telegram.bot.transportBot.mail.SendEmail;
 import com.kirylliuss.telegram.bot.transportBot.state.UserState;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -18,8 +19,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final Map<Long, UserState> userStates = new ConcurrentHashMap<>();
 
-    public TelegramBot(BotConfig botConfig) {
+    private SendEmail sendEmail;
+
+    public TelegramBot(BotConfig botConfig, SendEmail sendEmail) {
         this.botConfig = botConfig;
+        this.sendEmail = sendEmail;
     }
 
     @Override
@@ -68,10 +72,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void saveFeedback(long chatId, String username, String feedbackText) {
-        System.out.println("--- НОВЫ ВОДГУК ---");
-        System.out.println("ID: " + chatId + ", Імя: " + username);
-        System.out.println("Тэкст: " + feedbackText);
-        System.out.println("--------------------");
+        sendEmail.sendMessage("header = { " + chatId + ", " + username + " }\n" +
+                "text = { " + feedbackText + " }.");
     }
 
     private void sendMessage(String message, long chatId){
