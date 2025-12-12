@@ -57,7 +57,6 @@ public class SendEmail {
     }
 
     public void sendMessage(String text){
-        System.out.println("LOL1");
         init();
         startSession();
         try{
@@ -71,7 +70,6 @@ public class SendEmail {
 
             System.out.println("Message sent.");
         } catch (Exception ex){
-            System.out.println("LOL2");
             ex.printStackTrace();
         }
     }
